@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Minecraft stránka</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f1724; --accent:#57c87f; --muted:#9aa7b2;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#07101a 0%, #08121b 60%, #021018 100%);color:#e6f0f0;min-height:100vh}
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:linear-gradient(90deg,rgba(0,0,0,0.25),transparent);backdrop-filter:blur(4px)}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:56px;height:56px;background:linear-gradient(45deg,#2e8b57,#6ad97f);border-radius:8px;display:grid;place-items:center;font-family:'Press Start 2P',monospace;font-size:11px;color:#052013;box-shadow:0 6px 18px rgba(0,0,0,.45),inset 0 -3px 8px rgba(255,255,255,.04)}
+    nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-weight:600}
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:28px;padding:56px 28px;align-items:center}
+    .hero h1{font-family:'Press Start 2P',monospace;font-size:28px;margin:0 0 12px;color:var(--accent)}
+    .hero p{margin:0 0 20px;color:var(--muted)}
+    .btn{display:inline-block;padding:12px 18px;border-radius:10px;background:var(--accent);color:#072018;font-weight:700;text-decoration:none;box-shadow:0 8px 20px rgba(22,100,64,.12)}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.06));padding:18px;border-radius:12px}
+
+    /* server status */
+    .status{display:flex;flex-direction:column;gap:10px}
+    .status .line{display:flex;align-items:center;justify-content:space-between;font-weight:600}
+    .dot{width:12px;height:12px;border-radius:50%}
+
+    /* features */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .feature{padding:14px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(0,0,0,0.04));text-align:center}
+    .feature h3{margin:10px 0 6px}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* gallery */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+    .tile{height:120px;border-radius:8px;background-size:cover;background-position:center;border:1px solid rgba(255,255,255,0.03)}
+
+    footer{padding:30px 28px;text-align:center;color:var(--muted)}
+
+    /* responsive */
+    @media (max-width:880px){
+      .hero{grid-template-columns:1fr;}
+      .features{grid-template-columns:repeat(2,1fr)}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:520px){
+      .features{grid-template-columns:1fr}
+      .gallery{grid-template-columns:1fr}
+      .logo{width:46px;height:46px;font-size:9px}
+      .hero h1{font-size:20px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">MC</div>
+      <div>
+        <div style="font-weight:700">Minecraft CS</div>
+        <div style="font-size:12px;color:var(--muted)">survival • minigames • komunita</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#join">Připojit</a>
+      <a href="#features">Funkce</a>
+      <a href="#gallery">Galerie</a>
+      <a href="#contact">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1>Vítej na našem Minecraft serveru!</h1>
+        <p>Survival server s economy, VIP a pravidelnými eventy. Přidej se k přátelům, postav si základnu a bojuj s ostatními hráči.</p>
+        <a id="join" class="btn" href="#" onclick="joinClicked()">Připojit se: mc.vaseserver.cz</a>
+
+        <div class="card" style="margin-top:18px;max-width:520px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700">Aktuální stav serveru</div>
+              <div class="muted" style="margin-top:6px">Kontrola stavu v reálném čase (simulováno)</div>
+            </div>
+            <div style="text-align:right">
+              <div id="players" style="font-size:20px;font-weight:800">--- hráčů</div>
+              <div class="muted">online</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="status">
+            <div class="line"><span>IP</span><span class="muted">mc.vaseserver.cz:25565</span></div>
+            <div class="line"><span>Verze</span><span class="muted">1.20.1</span></div>
+            <div class="line"><span>Ping</span><span id="ping" class="muted">-- ms</span></div>
+          </div>
+        </div>
+
+        <div id="features" class="features">
+          <div class="feature">
+            <div style="font-size:22px;">⚔️</div>
+            <h3>PvP Areny</h3>
+            <div class="muted">Soutěžní arény pro hodnocení a turnaje</div>
+          </div>
+          <div class="feature">
+            <div style="font-size:22px;">💰</div>
+            <h3>Economy</h3>
+            <div class="muted">Obchod, aukce a vlastní měna</div>
+          </div>
+          <div class="feature">
+            <div style="font-size:22px;">🎉</div>
+            <h3>Eventy</h3>
+            <div class="muted">Týdenní eventy s odměnami</div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside style="max-width:420px">
+        <div class="card">
+          <h3 style="margin:0 0 8px">Rychlá statistika</h3>
+          <div class="muted">Poslední restart: <strong id="restart">—</strong></div>
+          <hr style="margin:12px 0;border:0;border-top:1px solid rgba(255,255,255,0.03)" />
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:120px">
+              <div class="muted">Hráči dnes</div>
+              <div style="font-weight:800"><span id="today">---</span></div>
+            </div>
+            <div style="flex:1;min-width:120px">
+              <div class="muted">Top den</div>
+              <div style="font-weight:800">128</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <a class="btn" href="#contact">Kontaktovat adminy</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin:0 0 8px">Krátká mapa</h3>
+          <div class="muted">Ukázka / waypointy</div>
+          <div class="gallery" style="margin-top:12px">
+            <div class="tile" style="background-image:linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.04)), url('https://picsum.photos/seed/mc1/400/300')"></div>
+            <div class="tile" style="background-image:linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.04)), url('https://picsum.photos/seed/mc2/400/300')"></div>
+            <div class="tile" style="background-image:linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.04)), url('https://picsum.photos/seed/mc3/400/300')"></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section style="padding:28px">
+      <h2 id="gallery">Galerie</h2>
+      <p class="muted">Několik snímků ze serveru</p>
+      <div class="gallery" style="margin-top:12px">
+        <div class="tile" style="background-image:url('https://picsum.photos/seed/land1/800/600')"></div>
+        <div class="tile" style="background-image:url('https://picsum.photos/seed/land2/800/600')"></div>
+        <div class="tile" style="background-image:url('https://picsum.photos/seed/land3/800/600')"></div>
+      </div>
+    </section>
+
+    <section id="contact" style="padding:28px">
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start">
+        <div class="card">
+          <h2>Kontakt</h2>
+          <p class="muted">Máte dotaz? Napište nám zprávu.</p>
+          <form onsubmit="event.preventDefault(); sendMsg()">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <input id="name" placeholder="Jméno" style="padding:10px;border-radius:8px;border:0;background:#07121a;color:inherit" required />
+              <input id="email" placeholder="E‑mail" style="padding:10px;border-radius:8px;border:0;background:#07121a;color:inherit" required />
+              <textarea id="msg" placeholder="Zpráva" rows="5" style="padding:10px;border-radius:8px;border:0;background:#07121a;color:inherit" required></textarea>
+              <button class="btn" type="submit">Odeslat</button>
+            </div>
+          </form>
+        </div>
+
+        <aside>
+          <div class="card">
+            <h3>Server informace</h3>
+            <div class="muted">IP: <strong>mc.vaseserver.cz</strong></div>
+            <div class="muted" style="margin-top:8px">Discord: <strong>discord.gg/vasserver</strong></div>
+            <div class="muted" style="margin-top:8px">Verze: <strong>1.20.1</strong></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © <span id="year"></span> Minecraft CS — Vytvořeno s ❤️
+  </footer>
+
+  <script>
+    // jednoduchá simulace statusu serveru
+    function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+    function updateStatus(){
+      const players = rand(3,76)
+      document.getElementById('players').textContent = players + ' hráčů'
+      document.getElementById('ping').textContent = rand(30,180) + ' ms'
+      document.getElementById('restart').textContent = new Date(Date.now()-rand(1,12)*3600*1000).toLocaleString()
+      document.getElementById('today').textContent = rand(20,230)
+    }
+    function joinClicked(){
+      alert('Kopírujte IP: mc.vaseserver.cz:25565 — vložte do připojit v Minecraftu')
+    }
+    function sendMsg(){
+      const name = document.getElementById('name').value
+      alert('Děkujeme '+name+' — zpráva byla odeslána (simulováno)')
+      document.getElementById('name').value=''
+      document.getElementById('email').value=''
+      document.getElementById('msg').value=''
+    }
+    document.getElementById('year').textContent = new Date().getFullYear()
+    updateStatus()
+    setInterval(updateStatus,8000)
+  </script>
+</body>
+</html>
