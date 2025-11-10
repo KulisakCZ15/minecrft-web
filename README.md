@@ -1,1 +1,1 @@
-# minecrft-web
+# minecraft-web
